@@ -1,10 +1,9 @@
 var ticTacToe = angular.module("ticTacToe", []);
 
 ticTacToe.controller("mainController", function ($scope) {
-$scope.playgame = function()
-{
-  $('#myModalW').modal('hide');
-}
+  $scope.playgame = function () {
+    $("#myModalW").modal("hide");
+  };
 
   let duplicate = [];
   $scope.board = [];
@@ -20,7 +19,15 @@ $scope.playgame = function()
     $scope.board[x] = [];
     duplicate[x] = [];
   }
-
+  $scope.boxOne='';
+  $scope.boxTwo='';
+  $scope.boxThree='';
+  $scope.boxFour='';
+  $scope.boxFive='';
+  $scope.boxSix='';
+  $scope.boxSeven='';
+  $scope.boxEight='';
+  $scope.boxNine='';
   $scope.nextPlay = function (x, y) {
     if ($scope.won === "") {
       if (!duplicate[x][y]) {
@@ -32,6 +39,15 @@ $scope.playgame = function()
         $scope.board[x][y] = marker;
         duplicate[x][y] = marker;
         moveCount[marker] += 1;
+        if (x == 0 && y == 0) $scope.boxOne = marker;
+        else if (x == 0 && y == 1) $scope.boxTwo = marker;
+        else if (x == 0 && y == 2) $scope.boxThree = marker;
+        else if (x == 1 && y == 0) $scope.boxFour = marker;
+        else if (x == 1 && y == 1) $scope.boxFive = marker;
+        else if (x == 1 && y == 2) $scope.boxSix = marker;
+        else if (x == 2 && y == 0) $scope.boxSeven = marker;
+        else if (x == 2 && y == 1) $scope.boxEight = marker;
+        else if (x == 2 && y == 2) $scope.boxNine = marker;
       }
 
       if (moveCount[marker] >= 3) {
@@ -44,50 +60,111 @@ $scope.playgame = function()
         }
       }
     }
+    // console.log($scope.boxOne);
+    // console.log($scope.boxTwo);
+    // console.log($scope.boxThree);
   };
 
   function checkForWin(x, y) {
-    if (checkRowColumn(x, y, "column")) {
+    if (checkRowColumn(x, y)) {
       return true;
-    } else if (checkRowColumn(x, y, "row")) {
-      return true;
-    } else if (checkDiagnols()) {
+    }
+     else if (checkDiagnols()) {
       return true;
     } else {
       return false;
     }
   }
 
-  function checkRowColumn(x, y, check) {
-    var flag = "";
-    var row = x;
-    var column = y;
-    for (var i = 0; i < 3; i++) {
-      if (check === "row") {
-        column = i;
-      } else {
-        row = i;
-      }
-      if ($scope.board[row][column] !== marker) {
-        flag = false;
-      }
+  function checkRowColumn(x, y) {
+    if (
+      $scope.board[0][0] === marker &&
+      $scope.board[0][1] === marker &&
+      $scope.board[0][2] === marker
+    ){
+      $("#box1").css("background-color", "#b3ffb3");
+      $("#box2").css("background-color", "#b3ffb3");
+      $("#box3").css("background-color", "#b3ffb3");
+    return true;
     }
-    if (flag === "") {
-      flag = true;
+    if (
+      $scope.board[1][0] === marker &&
+      $scope.board[1][1] === marker &&
+      $scope.board[1][2] === marker
+    )
+    {
+      $("#box4").css("background-color", "#b3ffb3");
+      $("#box5").css("background-color", "#b3ffb3");
+      $("#box6").css("background-color", "#b3ffb3");
+    return true;
     }
-    return flag;
+    if (
+      $scope.board[2][0] === marker &&
+      $scope.board[2][1] === marker &&
+      $scope.board[2][2] === marker
+    )
+    {
+      $("#box7").css("background-color", "#b3ffb3");
+      $("#box8").css("background-color", "#b3ffb3");
+      $("#box9").css("background-color", "#b3ffb3");
+    return true;
+    }
+    if (
+      $scope.board[0][0] === marker &&
+      $scope.board[1][0] === marker &&
+      $scope.board[2][0] === marker
+    )
+    {
+      $("#box1").css("background-color", "#b3ffb3");
+      $("#box4").css("background-color", "#b3ffb3");
+      $("#box7").css("background-color", "#b3ffb3");
+    return true;
+    }
+    if (
+      $scope.board[0][1] === marker &&
+      $scope.board[1][1] === marker &&
+      $scope.board[2][1] === marker
+    )
+    {
+      $("#box2").css("background-color", "#b3ffb3");
+      $("#box5").css("background-color", "#b3ffb3");
+      $("#box8").css("background-color", "#b3ffb3");
+    return true;
+    }
+    if (
+      $scope.board[0][2] === marker &&
+      $scope.board[1][2] === marker &&
+      $scope.board[2][2] === marker
+    )
+    {
+      $("#box3").css("background-color", "#b3ffb3");
+      $("#box6").css("background-color", "#b3ffb3");
+      $("#box9").css("background-color", "#b3ffb3");
+    return true;
+    }
+
+    return false;
   }
 
   function checkDiagnols() {
     if (
-      ($scope.board[0][0] === marker &&
-        $scope.board[1][1] === marker &&
-        $scope.board[2][2] === marker) ||
-      ($scope.board[0][2] === marker &&
-        $scope.board[1][1] === marker &&
-        $scope.board[2][0] === marker)
+      $scope.board[0][0] === marker &&
+      $scope.board[1][1] === marker &&
+      $scope.board[2][2] === marker
     ) {
-      // console.log($scope.board[0][0], $scope.board[2][2],$scope.board[0][2], $scope.board[2][0]);
+      $("#box1").css("background-color", "#b3ffb3");
+      $("#box5").css("background-color", "#b3ffb3");
+      $("#box9").css("background-color", "#b3ffb3");
+      return true;
+    }
+    if (
+      $scope.board[0][2] === marker &&
+      $scope.board[1][1] === marker &&
+      $scope.board[2][0] === marker
+    ) {
+      $("#box3").css("background-color", "#b3ffb3");
+      $("#box5").css("background-color", "#b3ffb3");
+      $("#box7").css("background-color", "#b3ffb3");
       return true;
     }
     return false;
@@ -104,5 +181,24 @@ $scope.playgame = function()
     $scope.won = "";
     moveCount["X"] = 0;
     moveCount["O"] = 0;
+
+    $scope.boxOne='';
+    $scope.boxTwo='';
+    $scope.boxThree='';
+    $scope.boxFour='';
+    $scope.boxFive='';
+    $scope.boxSix='';
+    $scope.boxSeven='';
+    $scope.boxEight='';
+    $scope.boxNine='';
+    $("#box1").css("background-color", "transparent");
+      $("#box2").css("background-color", "transparent");
+      $("#box3").css("background-color", "transparent");
+      $("#box4").css("background-color", "transparent");
+      $("#box5").css("background-color", "transparent");
+      $("#box6").css("background-color", "transparent");
+      $("#box7").css("background-color", "transparent");
+      $("#box8").css("background-color", "transparent");
+      $("#box9").css("background-color", "transparent");
   };
 });
