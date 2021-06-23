@@ -129,3 +129,15 @@ td p button {
   color: #fff;
   opacity: 1;
 }
+svg {
+  height: 330px;
+  width: 350px;
+  position: absolute;
+  
+  }
+  line {
+  stroke:red;
+  stroke-width: 4px;
+  stroke-linecap:round;
+  stroke-dasharray: 10,10;
+  }

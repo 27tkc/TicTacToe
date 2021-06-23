@@ -18,16 +18,12 @@ ticTacToe.controller("mainController", function ($scope) {
   for (var x = 0; x < 3; x++) {
     $scope.board[x] = [];
     duplicate[x] = [];
+    $scope["col" + x] = false;
+      $scope["row" + x] = false;
+      $scope["diag" + x] = false;
   }
-  $scope.boxOne='';
-  $scope.boxTwo='';
-  $scope.boxThree='';
-  $scope.boxFour='';
-  $scope.boxFive='';
-  $scope.boxSix='';
-  $scope.boxSeven='';
-  $scope.boxEight='';
-  $scope.boxNine='';
+ 
+  $scope.box = ["", "", "", "", "", "", "", "", ""];
   $scope.nextPlay = function (x, y) {
     if ($scope.won === "") {
       if (!duplicate[x][y]) {
@@ -39,15 +35,15 @@ ticTacToe.controller("mainController", function ($scope) {
         $scope.board[x][y] = marker;
         duplicate[x][y] = marker;
         moveCount[marker] += 1;
-        if (x == 0 && y == 0) $scope.boxOne = marker;
-        else if (x == 0 && y == 1) $scope.boxTwo = marker;
-        else if (x == 0 && y == 2) $scope.boxThree = marker;
-        else if (x == 1 && y == 0) $scope.boxFour = marker;
-        else if (x == 1 && y == 1) $scope.boxFive = marker;
-        else if (x == 1 && y == 2) $scope.boxSix = marker;
-        else if (x == 2 && y == 0) $scope.boxSeven = marker;
-        else if (x == 2 && y == 1) $scope.boxEight = marker;
-        else if (x == 2 && y == 2) $scope.boxNine = marker;
+        if (x == 0 && y == 0) $scope.box[0] = marker;
+        else if (x == 0 && y == 1) $scope.box[1] = marker;
+        else if (x == 0 && y == 2) $scope.box[2] = marker;
+        else if (x == 1 && y == 0) $scope.box[3] = marker;
+        else if (x == 1 && y == 1) $scope.box[4] = marker;
+        else if (x == 1 && y == 2) $scope.box[5] = marker;
+        else if (x == 2 && y == 0) $scope.box[6] = marker;
+        else if (x == 2 && y == 1) $scope.box[7] = marker;
+        else if (x == 2 && y == 2) $scope.box[8] = marker;
       }
 
       if (moveCount[marker] >= 3) {
@@ -60,114 +56,72 @@ ticTacToe.controller("mainController", function ($scope) {
         }
       }
     }
-    // console.log($scope.boxOne);
-    // console.log($scope.boxTwo);
-    // console.log($scope.boxThree);
   };
 
   function checkForWin(x, y) {
-    if (checkRowColumn(x, y)) {
+    if (checkRowColumn(x, y, "row")) {
+      $scope["row" + x] = true;
       return true;
     }
-     else if (checkDiagnols()) {
+    if (checkRowColumn(x, y, "column")) {
+      $scope["col" + y] = true;
       return true;
-    } else {
+    } 
+    else if (checkDiagnols()) {
+      return true;
+    } 
+    else {
       return false;
     }
   }
 
-  function checkRowColumn(x, y) {
-    if (
-      $scope.board[0][0] === marker &&
-      $scope.board[0][1] === marker &&
-      $scope.board[0][2] === marker
-    ){
-      $("#box1").css("background-color", "#b3ffb3");
-      $("#box2").css("background-color", "#b3ffb3");
-      $("#box3").css("background-color", "#b3ffb3");
-    return true;
+  function checkRowColumn(x, y, check) {
+    var flag = "";
+    var row = x;
+    var column = y;
+    for (var i = 0; i < 3; i++) {
+      if (check === "row") {
+        column = i;
+      } else {
+        row = i;
+      }
+      if ($scope.board[row][column] !== marker) {
+        flag = false;
+      }
     }
-    if (
-      $scope.board[1][0] === marker &&
-      $scope.board[1][1] === marker &&
-      $scope.board[1][2] === marker
-    )
-    {
-      $("#box4").css("background-color", "#b3ffb3");
-      $("#box5").css("background-color", "#b3ffb3");
-      $("#box6").css("background-color", "#b3ffb3");
-    return true;
+    if (flag === "") {
+      flag = true;
     }
-    if (
-      $scope.board[2][0] === marker &&
-      $scope.board[2][1] === marker &&
-      $scope.board[2][2] === marker
-    )
-    {
-      $("#box7").css("background-color", "#b3ffb3");
-      $("#box8").css("background-color", "#b3ffb3");
-      $("#box9").css("background-color", "#b3ffb3");
-    return true;
-    }
-    if (
-      $scope.board[0][0] === marker &&
-      $scope.board[1][0] === marker &&
-      $scope.board[2][0] === marker
-    )
-    {
-      $("#box1").css("background-color", "#b3ffb3");
-      $("#box4").css("background-color", "#b3ffb3");
-      $("#box7").css("background-color", "#b3ffb3");
-    return true;
-    }
-    if (
-      $scope.board[0][1] === marker &&
-      $scope.board[1][1] === marker &&
-      $scope.board[2][1] === marker
-    )
-    {
-      $("#box2").css("background-color", "#b3ffb3");
-      $("#box5").css("background-color", "#b3ffb3");
-      $("#box8").css("background-color", "#b3ffb3");
-    return true;
-    }
-    if (
-      $scope.board[0][2] === marker &&
-      $scope.board[1][2] === marker &&
-      $scope.board[2][2] === marker
-    )
-    {
-      $("#box3").css("background-color", "#b3ffb3");
-      $("#box6").css("background-color", "#b3ffb3");
-      $("#box9").css("background-color", "#b3ffb3");
-    return true;
-    }
-
-    return false;
+    return flag;
   }
-
+  
   function checkDiagnols() {
+      var temp=false;
+      var diag="";
     if (
       $scope.board[0][0] === marker &&
       $scope.board[1][1] === marker &&
       $scope.board[2][2] === marker
     ) {
-      $("#box1").css("background-color", "#b3ffb3");
-      $("#box5").css("background-color", "#b3ffb3");
-      $("#box9").css("background-color", "#b3ffb3");
-      return true;
+      $scope.diag1=true;
+      diag="left";
+      temp=true; 
     }
-    if (
+    else if (
       $scope.board[0][2] === marker &&
       $scope.board[1][1] === marker &&
       $scope.board[2][0] === marker
     ) {
-      $("#box3").css("background-color", "#b3ffb3");
-      $("#box5").css("background-color", "#b3ffb3");
-      $("#box7").css("background-color", "#b3ffb3");
-      return true;
+  
+      $scope.diag2=true;
+          diag="right";
+          temp=true;
     }
-    return false;
+    else{
+      temp=false;
+    }
+   
+    return temp;
   }
   //Reset the game
   $scope.reset = function () {
@@ -175,6 +129,9 @@ ticTacToe.controller("mainController", function ($scope) {
       for (var y = 0; y < 3; y++) {
         $scope.board[x][y] = "";
         duplicate[x][y] = "";
+        $scope["col" + x] = false;
+        $scope["row" + x] = false;
+        $scope["diag" + x] = false;
       }
     }
     marker = "O";
@@ -182,23 +139,12 @@ ticTacToe.controller("mainController", function ($scope) {
     moveCount["X"] = 0;
     moveCount["O"] = 0;
 
-    $scope.boxOne='';
-    $scope.boxTwo='';
-    $scope.boxThree='';
-    $scope.boxFour='';
-    $scope.boxFive='';
-    $scope.boxSix='';
-    $scope.boxSeven='';
-    $scope.boxEight='';
-    $scope.boxNine='';
-    $("#box1").css("background-color", "transparent");
-      $("#box2").css("background-color", "transparent");
-      $("#box3").css("background-color", "transparent");
-      $("#box4").css("background-color", "transparent");
-      $("#box5").css("background-color", "transparent");
-      $("#box6").css("background-color", "transparent");
-      $("#box7").css("background-color", "transparent");
-      $("#box8").css("background-color", "transparent");
-      $("#box9").css("background-color", "transparent");
+    for (var i = 0; i < 9; i++) {
+      $scope.box[i] = "";
+    }
+    
+
+   
+    // $("td").css("background-color", "transparent");
   };
 });
